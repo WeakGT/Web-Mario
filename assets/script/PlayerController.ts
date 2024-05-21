@@ -33,7 +33,7 @@ export class PlayerController extends cc.Component {
         cc.systemEvent.on(cc.SystemEvent.EventType.KEY_UP, this.onKeyUp, this);
     }
 
-    start (){
+    start() {
         this.idleFrame = this.getComponent(cc.Sprite).spriteFrame;
         // ========== TODO ==========
         // 1. Assign the animation component into this.anim from this.node
@@ -41,21 +41,15 @@ export class PlayerController extends cc.Component {
 
     }
 
-    update (dt){
+    update(dt) {
         this.node.x += this.playerSpeed * this.moveDir * dt;
         this.node.scaleX = (this.moveDir >= 0) ? 1 : -1;
-        if(this.getComponent(cc.RigidBody).linearVelocity.y != 0)
-            this.fallDown = true;
-        else
-            this.fallDown = false;
-
-        this.playerAnimation();
+        if(this.getComponent(cc.RigidBody).linearVelocity.y != 0) this.fallDown = true;
+        else this.fallDown = false;
     }
 
-    onKeyDown(event)
-    {
-        switch(event.keyCode)
-        {
+    onKeyDown(event) {
+        switch(event.keyCode) {
             case cc.macro.KEY.left:
                 this.leftDown = true;
                 this.playerMove(-1);
@@ -73,10 +67,8 @@ export class PlayerController extends cc.Component {
         }
     }
 
-    onKeyUp(event)
-    {
-        switch(event.keyCode)
-        {
+    onKeyUp(event) {
+        switch(event.keyCode) {
             case cc.macro.KEY.left:
                 this.leftDown = false;
                 if(this.rightDown)
@@ -94,34 +86,8 @@ export class PlayerController extends cc.Component {
         }
     }
 
-    public playerMove(moveDir: number){
+    public playerMove(moveDir: number) {
         this.moveDir = moveDir;
-    }
-
-    public playerAnimation(){
-        if(this.fallDown == true){
-            // ========== TODO ==========
-            // 1. Play fall_front animation (Checked the animation is playing or not and moveDir=0)
-            // 2. Play fall_side animation (Checked the animation is playing or not and moveDir != 0)
-            // if(this.moveDir == 0 && !this.anim.getAnimationState("fall_front").isPlaying)
-            //     this.anim.play("fall_front");
-            // else if(this.moveDir != 0 && !this.anim.getAnimationState("fall_side").isPlaying)
-            //     this.anim.play("fall_side");
-        }
-        else{
-            if(this.moveDir == 0)
-            {
-                this.getComponent(cc.Sprite).spriteFrame = this.idleFrame;
-                // ========== TODO ==========
-                // 1. Stop the animation which is playing
-                this.anim.stop();
-            }
-
-            // ========== TODO ==========
-            // 1. Play walk animation (Checked the walk animation is playing or not)
-            else if(!this.anim.getAnimationState("walk").isPlaying)
-                this.anim.play("walk");
-        }
     }
 
     public playerJump(velocity: number)
