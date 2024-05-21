@@ -68,7 +68,7 @@ export class PlayerController extends cc.Component {
                 this.reborn(cc.v3(-445, -275, 0));
                 break;
             case cc.macro.KEY.space:
-                this.playerJump(600);
+                this.playerJump(200);
                 break;
         }
     }
