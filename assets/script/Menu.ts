@@ -9,7 +9,8 @@ export default class Menu extends cc.Component {
         StartButton.component = "Menu";
         StartButton.handler = "loadGameScene";
         
-        cc.find("Canvas/StartButton").getComponent(cc.Button).clickEvents.push(StartButton);
+        cc.find("Canvas/L1_Button").getComponent(cc.Button).clickEvents.push(StartButton);
+        cc.find("Canvas/L2_Button").getComponent(cc.Button).clickEvents.push(StartButton);
     }
 
     loadGameScene(){
