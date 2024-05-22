@@ -45,6 +45,13 @@ export class PlayerController extends cc.Component {
         }
     }
 
+    onBeginContact(contact, selfCollider, otherCollider) {
+        // Boundary || BoundaryNULL
+        if (otherCollider.node.name.substring(0, 8) == "Boundary") {
+            contact.disabled = true;
+        }
+    }
+
     public reborn(rebornPos: cc.Vec3) {
         this.node.position = rebornPos;
         this.getComponent(cc.RigidBody).linearVelocity = cc.v2();
