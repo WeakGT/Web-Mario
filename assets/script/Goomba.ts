@@ -4,7 +4,7 @@ const { ccclass, property } = cc._decorator;
 export class Goomba extends cc.Component {
 
     @property
-    moveSpeed: number = 100;
+    moveSpeed: number = 80;
 
     @property(cc.SpriteFrame)
     diedGoombaSprite: cc.SpriteFrame = null;
@@ -19,7 +19,7 @@ export class Goomba extends cc.Component {
 
     onBeginContact(contact, selfCollider, otherCollider) {
         // console.log(otherCollider.node.group);
-        if (otherCollider.node.name == "Boundary") {
+        if (otherCollider.node.name == "Boundary" || otherCollider.node.name == "Goomba") {
             this.moveDirection *= -1;
             this.body.linearVelocity = cc.v2(this.moveDirection * this.moveSpeed, 0);
         }

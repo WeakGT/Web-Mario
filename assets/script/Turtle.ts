@@ -43,8 +43,13 @@ export class Turtle extends cc.Component {
             else if (otherCollider.node.name == "BoundaryNULL") {
                 contact.disable = true;
             }
+            else if (otherCollider.node.name == "Boundary") {
+                this.moveDirection *= -1;
+                this.body.linearVelocity = cc.v2(this.moveDirection * this.moveSpeed, 0);
+                this.node.scaleX *= -1;
+            }
         } else {
-            if (otherCollider.node.name == "BoundaryNULL") {
+            if (otherCollider.node.name == "BoundaryNULL" || otherCollider.node.name == "Turtle") {
                 this.moveDirection *= -1;
                 this.body.linearVelocity = cc.v2(this.moveDirection * this.moveSpeed, 0);
                 this.node.scaleX *= -1;
