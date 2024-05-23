@@ -13,15 +13,14 @@ export class Turtle extends cc.Component {
     private moveDirection: number = 1;
     private isShell: boolean = false;
     private canCollide: boolean = true;
-    // private physicManager: cc.PhysicsManager = null;
+    private anim: cc.Animation = null;
 
     onLoad() {
         this.body = this.getComponent(cc.RigidBody);
         this.body.linearVelocity = cc.v2(this.moveSpeed, 0);
 
-        // this.physicManager = cc.director.getPhysicsManager();
-        // this.physicManager.enabled = true;
-        // this.physicManager.gravity = cc.v2(0, -200);
+        this.anim = this.getComponent(cc.Animation);
+        this.anim.play("TurtleWalking");
     }
 
     onBeginContact(contact, selfCollider, otherCollider) {
@@ -39,6 +38,7 @@ export class Turtle extends cc.Component {
                     this.moveDirection = contactNormal.x > 0 ? -1 : 1;
                     this.body.linearVelocity = cc.v2(this.moveDirection * this.moveSpeed * 2, 0); // 快速移動
                 }
+                if (!this.anim.getAnimationState("ShellRunning").isPlaying) this.anim.play("ShellRunning");
             }
             else if (otherCollider.node.name == "BoundaryNULL") {
                 contact.disable = true;
@@ -65,8 +65,11 @@ export class Turtle extends cc.Component {
     }
 
     changeToShell() {
+        if (this.anim.getAnimationState("TurtleWalking").isPlaying) this.anim.stop();
+
         this.isShell = true;
         this.body.linearVelocity = cc.v2(0, 0);
         this.getComponent(cc.Sprite).spriteFrame = this.shellSprite;
+        
     }
 }

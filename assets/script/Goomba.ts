@@ -15,6 +15,10 @@ export class Goomba extends cc.Component {
     onLoad() {
         this.body = this.getComponent(cc.RigidBody);
         this.body.linearVelocity = cc.v2(this.moveSpeed, 0);
+
+        this.schedule(() => {
+            this.node.scaleX *= -1
+        }, 0.25);
     }
 
     onBeginContact(contact, selfCollider, otherCollider) {
