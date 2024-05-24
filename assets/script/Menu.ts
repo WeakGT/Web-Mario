@@ -13,8 +13,8 @@ export default class Menu extends cc.Component {
         cc.find("Canvas/L2_Button").getComponent(cc.Button).clickEvents.push(StartButton);
     }
 
-    loadGameScene(){
-        cc.director.loadScene("level1"); 
+    loadGameScene() {
+        cc.director.loadScene("GameStart1"); 
     }
     
 }

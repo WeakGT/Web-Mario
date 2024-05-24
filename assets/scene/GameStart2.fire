@@ -58,7 +58,7 @@
     "_groupIndex": 0,
     "groupIndex": 0,
     "autoReleaseAssets": false,
-    "_id": "26150dd1-466a-4ab6-b576-fbefada1b3c4"
+    "_id": "2a2ef0d3-4b45-4565-85c9-06adb9bf703f"
   },
   {
     "__type__": "cc.Node",
@@ -82,6 +82,9 @@
       },
       {
         "__id__": 8
+      },
+      {
+        "__id__": 9
       }
     ],
     "_prefab": null,
@@ -370,5 +373,15 @@
     "_originalWidth": 0,
     "_originalHeight": 0,
     "_id": "29zXboiXFBKoIV4PQ2liTe"
+  },
+  {
+    "__type__": "4db2a4eniZK140l7bwP+8Hp",
+    "_name": "",
+    "_objFlags": 0,
+    "node": {
+      "__id__": 2
+    },
+    "_enabled": true,
+    "_id": "e1rEIYGPZMvpAZWhCYml9b"
   }
 ]

@@ -39,6 +39,9 @@ export class PlayerController extends cc.Component {
     @property(cc.AudioClip)
     dieSound: cc.AudioClip = null;
 
+    @property(cc.AudioClip)
+    gameOverSound: cc.AudioClip = null;
+
 
     private moveDir = 0;
     private leftDown: boolean = false;
@@ -50,6 +53,9 @@ export class PlayerController extends cc.Component {
     private fallDown: boolean = false;
     private isInvincible: boolean = false;
     public life: number = 1;
+
+    private remainTime: number = 300;
+    private remainLife: number = 1;
 
     onLoad() {
         this.physicManager = cc.director.getPhysicsManager();
@@ -65,25 +71,34 @@ export class PlayerController extends cc.Component {
     // start() {}
 
     update(dt) {
-        if (this.isDescending) {
+        if (this.isDescending) { // win
             this.rigidBody.linearVelocity = cc.v2(0, -10);
         }
-        else if (this.node.y < -320) {
-            if (this.life > 0) {
-                this.life = 0;
-                this.die();
-            }
+        else if (this.life == 0) { // die
+            // do nothing
         }
-        else {
-            if (this.life > 0) {
-                this.node.x += this.playerSpeed * this.moveDir * dt;
-                this.node.scaleX = this.moveDir >= 0 ? 1 : -1;
-                this.playAnimation();
+        else if (this.node.y < -320) { // out of bound
+            this.life = 0;
+            this.die();
+        }
+        else { // gaming
+            // timeout
+            if (Math.floor(this.remainTime) > 0) this.remainTime -= dt;
+            else this.life = 0, this.getComponent(cc.RigidBody).linearVelocity = cc.v2(0, 1000), this.die();
 
-                if (this.rigidBody.linearVelocity.y != 0) this.fallDown = true;
-                else this.fallDown = false;
-            }
+            this.node.x += this.playerSpeed * this.moveDir * dt;
+            this.node.scaleX = this.moveDir >= 0 ? 1 : -1;
+            this.playAnimation();
+
+            if (this.rigidBody.linearVelocity.y != 0) this.fallDown = true;
+            else this.fallDown = false;            
         }
+
+        // update UI
+        // cc.find("Canvas/Main Camera/score").getComponent(cc.Label).string = (Array(7).join("0") + this.score.toString()).slice(-7);
+        // cc.find("Canvas/Main Camera/Labels/coinNum").getComponent(cc.Label).string = String(this.coin);
+        cc.find("Canvas/Main Camera/Labels/LifeNumber").getComponent(cc.Label).string = String(this.remainLife);
+        cc.find("Canvas/Main Camera/Labels/Time").getComponent(cc.Label).string = String(Math.floor(this.remainTime));
     }
 
     playAnimation() {
@@ -103,16 +118,30 @@ export class PlayerController extends cc.Component {
 
     reborn(rebornPos: cc.Vec3) {
         this.node.position = rebornPos;
-        this.getComponent(cc.RigidBody).linearVelocity = cc.v2();
+        // this.getComponent(cc.RigidBody).linearVelocity = cc.v2();
+        cc.audioEngine.playEffect(this.bgm, true);
+        this.life = 1;
+        this.remainTime = 300;
     }
 
     die() {
-        cc.audioEngine.stopAll();
-        cc.audioEngine.playEffect(this.dieSound, false);
-        this.getComponent(cc.Sprite).spriteFrame = this.diedMarioSprite;
-        this.scheduleOnce(() => {
-            cc.director.loadScene("menu");
-        }, 2);
+        this.remainLife -= 1;
+        if (this.remainLife > 0) { // life -= 1
+            cc.audioEngine.stopAll();
+            cc.audioEngine.playEffect(this.dieSound, false);
+            this.getComponent(cc.Sprite).spriteFrame = this.diedMarioSprite;
+            this.scheduleOnce(() => {
+                this.reborn(cc.v3(-414, -280, 0));
+            }, 2);
+        }
+        else { // game over
+            cc.audioEngine.stopAll();
+            cc.audioEngine.playEffect(this.gameOverSound, false);
+            this.getComponent(cc.Sprite).spriteFrame = this.diedMarioSprite;
+            this.scheduleOnce(() => {
+                cc.director.loadScene("GameOver");
+            }, 2);
+        }
     }
 
     beInvincible() {
@@ -165,12 +194,12 @@ export class PlayerController extends cc.Component {
         if (otherCollider.node.name.substring(0, 8) == "Boundary") {
             contact.disabled = true;
         }
-        else if (otherCollider.node.name == "Flag") {
+        else if (otherCollider.node.name == "Flag") { // win
             this.isDescending = true;
             cc.systemEvent.off(cc.SystemEvent.EventType.KEY_DOWN, this.onKeyDown, this);
             cc.systemEvent.off(cc.SystemEvent.EventType.KEY_UP, this.onKeyUp, this);
         }
-        else if (otherCollider.node.name == "Box" && this.isDescending && contact.getWorldManifold().normal.y == -1) {
+        else if (otherCollider.node.name == "Box" && this.isDescending && contact.getWorldManifold().normal.y == -1) { // win
             this.isDescending = false;
             this.rigidBody.linearVelocity = cc.v2(0, 0);
             cc.director.loadScene("menu");
