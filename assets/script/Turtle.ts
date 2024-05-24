@@ -10,8 +10,7 @@ export class Turtle extends cc.Component {
     shellSprite: cc.SpriteFrame = null;
 
     private moveDirection: number = 1;
-    private state: number = 1; // 1: turtle, 2: shell, 3: shellRunning
-    private canCollide: boolean = true;
+    public state: number = 1; // 1: turtle, 2: shell, 3: shellRunning
     private anim: cc.Animation = null;
 
     onLoad() {
@@ -29,6 +28,14 @@ export class Turtle extends cc.Component {
     }
 
     onBeginContact(contact, selfCollider, otherCollider) {
+        if (otherCollider.node.name == "Mario") {
+            const marioComponent = otherCollider.node.getComponent("Mario");
+            if (marioComponent.life == 0) {
+                contact.disabled = true;
+                return;
+            }
+        }
+        /* ---------- ---------- ---------- */
         if (this.state == 1) {
             if (otherCollider.node.name == "BoundaryNULL") {
                 this.moveDirection *= -1;
@@ -39,7 +46,7 @@ export class Turtle extends cc.Component {
             }
             else if (otherCollider.node.name == "Mario") {
                 const contactNormal = contact.getWorldManifold().normal;
-                if (contactNormal.y > 0.8) {
+                if (contactNormal.y > 0.5) {
                     if (this.anim.getAnimationState("TurtleWalking").isPlaying) this.anim.stop();                        
                     this.getComponent(cc.Sprite).spriteFrame = this.shellSprite;
                     this.state = 2; // shell
@@ -70,7 +77,7 @@ export class Turtle extends cc.Component {
             }
             else if (otherCollider.node.name == "Mario") {
                 const contactNormal = contact.getWorldManifold().normal;
-                if (contactNormal.y > 0.8) {
+                if (contactNormal.y > 0.5) {
                     if (this.anim.getAnimationState("ShellRunning").isPlaying) this.anim.stop();                        
                     this.getComponent(cc.Sprite).spriteFrame = this.shellSprite;
                     this.state = 2; // shell

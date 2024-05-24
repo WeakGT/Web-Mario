@@ -15,6 +15,14 @@ export class Mushroom extends cc.Component {
     }
 
     onBeginContact(contact, selfCollider, otherCollider) {
+        if (otherCollider.node.name == "Mario") {
+            const marioComponent = otherCollider.node.getComponent("Mario");
+            if (marioComponent.life == 0) {
+                contact.disabled = true;
+                return;
+            }
+        }
+        /* ---------- ---------- ---------- */
         if (otherCollider.node.name == "Boundary") this.moveDirection *= -1;
         else if (otherCollider.node.name == "BoundaryNULL") contact.disabled = true;
         else if (otherCollider.node.parent.name == "Enemies") contact.disabled = true;

@@ -5393,8 +5393,12 @@
     "usedSprite": {
       "__uuid__": "8301d0ee-27e5-4251-a54f-bc893ff2dbed"
     },
-    "coinPrefab": null,
-    "mushroomPrefab": null,
+    "coinPrefab": {
+      "__uuid__": "88570302-fd95-4af6-acd0-07705e99e2b2"
+    },
+    "mushroomPrefab": {
+      "__uuid__": "8e0ed8a0-ef58-45b5-abde-6028762ea61c"
+    },
     "_id": "3a0Vo29GJLso/b2GRKTp5Q"
   },
   {
@@ -5586,8 +5590,12 @@
     "usedSprite": {
       "__uuid__": "8301d0ee-27e5-4251-a54f-bc893ff2dbed"
     },
-    "coinPrefab": null,
-    "mushroomPrefab": null,
+    "coinPrefab": {
+      "__uuid__": "88570302-fd95-4af6-acd0-07705e99e2b2"
+    },
+    "mushroomPrefab": {
+      "__uuid__": "8e0ed8a0-ef58-45b5-abde-6028762ea61c"
+    },
     "_id": "bb6OftD2RGOaryjftoDGSl"
   },
   {
@@ -6375,12 +6383,12 @@
     "_offset": {
       "__type__": "cc.Vec2",
       "x": 0,
-      "y": 8
+      "y": 7.5
     },
     "_size": {
       "__type__": "cc.Size",
       "width": 0,
-      "height": 16
+      "height": 15
     },
     "_id": "a2W9IIv31D4Lm9vr7VApL8"
   },

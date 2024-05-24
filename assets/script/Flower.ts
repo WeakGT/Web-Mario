@@ -22,17 +22,22 @@ export class Flower extends cc.Component {
     startMoving() {
         const action = cc.repeatForever(
             cc.sequence(
-                cc.moveBy(1, 0, -34),
+                cc.moveBy(1, 0, -35),
                 cc.delayTime(1),
-                cc.moveBy(1, 0, 34),
+                cc.moveBy(1, 0, 35),
                 cc.delayTime(1))
         );
         this.node.runAction(action);
     }
     
     onBeginContact(contact, selfCollider, otherCollider) {
-        if (otherCollider.node.name === "Mario") { // Mario die
-
+        if (otherCollider.node.name == "Mario") {
+            const marioComponent = otherCollider.node.getComponent("Mario");
+            if (marioComponent.life == 0) {
+                contact.disabled = true;
+                return;
+            }
         }
+        /* ---------- ---------- ---------- */
     }
 }

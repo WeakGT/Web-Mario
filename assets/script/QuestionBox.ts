@@ -8,17 +8,11 @@ export class QuestionBox extends cc.Component {
 
     @property(cc.Prefab)
     coinPrefab: cc.Prefab = null;
-
+    
     @property(cc.Prefab)
     mushroomPrefab: cc.Prefab = null;
 
     private isHit: boolean = false;
-
-    onBeginContact(contact, selfCollider, otherCollider) {
-        if (otherCollider.node.name === 'Mario' && contact.getWorldManifold().normal.y < -0.5) {
-            this.onHit(selfCollider);
-        }
-    }
 
     onHit(selfCollider: cc.Collider) {
         if (this.isHit) return;
@@ -60,6 +54,20 @@ export class QuestionBox extends cc.Component {
                 const moveUp = cc.moveBy(0.5, cc.v2(0, 50)).easing(cc.easeCubicActionOut());
                 reward.runAction(moveUp);
             }
+        }
+    }
+
+    onBeginContact(contact, selfCollider, otherCollider) {
+        if (otherCollider.node.name == "Mario") {
+            const marioComponent = otherCollider.node.getComponent("Mario");
+            if (marioComponent.life == 0) {
+                contact.disabled = true;
+                return;
+            }
+        }
+        /* ---------- ---------- ---------- */
+        if (otherCollider.node.name === 'Mario' && contact.getWorldManifold().normal.y < -0.5) {
+            this.onHit(selfCollider);
         }
     }
 }

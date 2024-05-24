@@ -23,6 +23,14 @@ export class Goomba extends cc.Component {
     }
 
     onBeginContact(contact, selfCollider, otherCollider) {
+        if (otherCollider.node.name == "Mario") {
+            const marioComponent = otherCollider.node.getComponent("Mario");
+            if (marioComponent.life == 0) {
+                contact.disabled = true;
+                return;
+            }
+        }
+        /* ---------- ---------- ---------- */
         if (otherCollider.node.name.substring(0, 8) == "Boundary") {
             this.moveDirection *= -1;
         }
@@ -30,7 +38,7 @@ export class Goomba extends cc.Component {
             contact.disabled = true;
         }
         else if (otherCollider.node.name == "Mario") {
-            if (contact.getWorldManifold().normal.y > 0.8) {
+            if (contact.getWorldManifold().normal.y > 0.5) {
                 this.die();
             }
             else { // Mario die
