@@ -23,8 +23,11 @@ export class Goomba extends cc.Component {
     }
 
     onBeginContact(contact, selfCollider, otherCollider) {
-        if (otherCollider.node.name.substring(0, 8) == "Boundary" || otherCollider.node.name == "Goomba") {
+        if (otherCollider.node.name.substring(0, 8) == "Boundary") {
             this.moveDirection *= -1;
+        }
+        else if (otherCollider.node.parent.name == "Enemies") {
+            contact.disabled = true;
         }
         else if (otherCollider.node.name == "Mario") {
             if (contact.getWorldManifold().normal.y > 0.8) {

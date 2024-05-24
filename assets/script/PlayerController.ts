@@ -6,6 +6,12 @@ export class PlayerController extends cc.Component {
     @property()
     playerSpeed: number = 144;
 
+    @property(cc.SpriteFrame)
+    smallMarioSprite: cc.SpriteFrame = null;
+
+    @property(cc.SpriteFrame)
+    bigMarioSprite: cc.SpriteFrame = null;
+
     private moveDir = 0;
     private leftDown: boolean = false;
     private rightDown: boolean = false;
@@ -14,6 +20,7 @@ export class PlayerController extends cc.Component {
     private rigidBody: cc.RigidBody = null;
     private isDescending: boolean = false;
     private fallDown: boolean = false;
+    private life: number = 1;
 
     onLoad() {
         this.physicManager = cc.director.getPhysicsManager();
@@ -21,6 +28,7 @@ export class PlayerController extends cc.Component {
         // this.physicManager.gravity = cc.v2(0, -1500);
         this.anim = this.getComponent(cc.Animation);
         this.rigidBody = this.getComponent(cc.RigidBody);
+        
 
         cc.systemEvent.on(cc.SystemEvent.EventType.KEY_DOWN, this.onKeyDown, this);
         cc.systemEvent.on(cc.SystemEvent.EventType.KEY_UP, this.onKeyUp, this);
@@ -31,7 +39,8 @@ export class PlayerController extends cc.Component {
     update(dt) {
         if (this.isDescending) {
             this.rigidBody.linearVelocity = cc.v2(0, -10);
-        } else {
+        }
+        else {
             this.node.x += this.playerSpeed * this.moveDir * dt;
             this.node.scaleX = this.moveDir >= 0 ? 1 : -1;
             this.playAnimation();
@@ -42,8 +51,20 @@ export class PlayerController extends cc.Component {
     }
 
     playAnimation() {
-        if(this.moveDir == 0) this.anim.stop();
-        else if(!this.anim.getAnimationState("SmallMarioWalking").isPlaying) this.anim.play("SmallMarioWalking");
+        if(this.moveDir == 0) {
+            this.anim.stop();
+        }
+        else if (this.life == 1) {
+            if(!this.anim.getAnimationState("SmallMarioWalking").isPlaying) this.anim.play("SmallMarioWalking");
+        }
+        else if (this.life == 2) {
+            if(!this.anim.getAnimationState("BigMarioWalking").isPlaying) this.anim.play("BigMarioWalking");
+        }
+    }
+
+    public reborn(rebornPos: cc.Vec3) {
+        this.node.position = rebornPos;
+        this.getComponent(cc.RigidBody).linearVelocity = cc.v2();
     }
 
     onKeyDown(event) {
@@ -54,14 +75,8 @@ export class PlayerController extends cc.Component {
     }
 
     onKeyUp(event) {
-        if (event.keyCode == cc.macro.KEY.a) {
-            this.leftDown = false;
-            this.moveDir = this.rightDown ? 1 : 0;
-        }
-        if (event.keyCode == cc.macro.KEY.d) {
-            this.rightDown = false;
-            this.moveDir = this.leftDown ? -1 : 0;
-        }
+        if (event.keyCode == cc.macro.KEY.a) this.leftDown = false, this.moveDir = this.rightDown ? 1 : 0;
+        if (event.keyCode == cc.macro.KEY.d) this.rightDown = false, this.moveDir = this.leftDown ? -1 : 0;
     }
 
     onBeginContact(contact, selfCollider, otherCollider) {
@@ -83,10 +98,10 @@ export class PlayerController extends cc.Component {
             if (contact.getWorldManifold().normal.y < -0.8)
                 this.rigidBody.linearVelocity = cc.v2(0, 692);
         }
-    }
-
-    public reborn(rebornPos: cc.Vec3) {
-        this.node.position = rebornPos;
-        this.getComponent(cc.RigidBody).linearVelocity = cc.v2();
+        else if (otherCollider.node.name == "Mushroom") {
+            this.life += 1;
+            this.getComponent(cc.Sprite).spriteFrame = this.bigMarioSprite;
+            otherCollider.node.destroy();
+        }
     }
 }

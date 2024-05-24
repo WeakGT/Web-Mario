@@ -7,43 +7,59 @@ export class QuestionBox extends cc.Component {
     usedSprite: cc.SpriteFrame = null;
 
     @property(cc.Prefab)
-    rewardPrefab: cc.Prefab = null;
+    coinPrefab: cc.Prefab = null;
+
+    @property(cc.Prefab)
+    mushroomPrefab: cc.Prefab = null;
 
     private isHit: boolean = false;
 
     onBeginContact(contact, selfCollider, otherCollider) {
-        if (otherCollider.node.name === 'Mario' && contact.getWorldManifold().normal.y < -0.5) this.onHit();   
+        if (otherCollider.node.name === 'Mario' && contact.getWorldManifold().normal.y < -0.5) {
+            this.onHit(selfCollider);
+        }
     }
 
-    onHit() {
+    onHit(selfCollider: cc.Collider) {
         if (this.isHit) return;
 
         this.isHit = true;
 
-        const moveUp = cc.moveBy(0.1, cc.v2(0, 10));
-        const moveDown = cc.moveBy(0.1, cc.v2(0, -10));
-        const sequence = cc.sequence(moveUp, moveDown, cc.callFunc(this.changeSprite, this));
-        this.node.runAction(sequence);
+        this.node.runAction(
+            cc.sequence(
+                cc.moveBy(0.1, cc.v2(0, 10)),
+                cc.moveBy(0.1, cc.v2(0, -10)),
+                cc.callFunc(() => {
+                    const anim = this.getComponent(cc.Animation);
+                    if (anim) anim.stop();
+                    
+                    this.getComponent(cc.Sprite).spriteFrame = this.usedSprite;
+                    this.spawnReward(selfCollider.tag);
+                }, this)
+            )
+        );
     }
 
-    changeSprite() {
-        const anim = this.getComponent(cc.Animation);
-        if (anim) anim.stop();
+    spawnReward(tag: number) {
+        let prefabToInstantiate = null;
+
+        if (tag == 0) prefabToInstantiate = this.coinPrefab;
+        else if (tag == 1) prefabToInstantiate = this.mushroomPrefab;
         
-        this.getComponent(cc.Sprite).spriteFrame = this.usedSprite;
-        this.spawnReward();
-    }
-
-    spawnReward() {
-        if (this.rewardPrefab) {
-            const reward = cc.instantiate(this.rewardPrefab);
+        if (prefabToInstantiate) {
+            const reward = cc.instantiate(prefabToInstantiate);
             reward.setPosition(this.node.position.x, this.node.position.y + this.node.height, this.node.position.z);
             this.node.parent.addChild(reward);
 
-            const moveUp = cc.moveBy(0.5, cc.v2(0, 50)).easing(cc.easeCubicActionOut());
-            const fadeOut = cc.fadeOut(0.5);
-            const sequence = cc.sequence(moveUp, fadeOut, cc.callFunc(() => reward.destroy()));
-            reward.runAction(sequence);
+            if (tag == 0) {
+                const moveUp = cc.moveBy(0.5, cc.v2(0, 50)).easing(cc.easeCubicActionOut());
+                const fadeOut = cc.fadeOut(0.5);
+                const sequence = cc.sequence(moveUp, fadeOut, cc.callFunc(() => reward.destroy()));
+                reward.runAction(sequence);
+            } else if (tag == 1) {
+                const moveUp = cc.moveBy(0.5, cc.v2(0, 50)).easing(cc.easeCubicActionOut());
+                reward.runAction(moveUp);
+            }
         }
     }
 }

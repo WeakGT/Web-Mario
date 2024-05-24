@@ -30,9 +30,12 @@ export class Turtle extends cc.Component {
 
     onBeginContact(contact, selfCollider, otherCollider) {
         if (this.state == 1) {
-            if (otherCollider.node.name == "BoundaryNULL" || otherCollider.node.name == "Turtle") {
+            if (otherCollider.node.name == "BoundaryNULL") {
                 this.moveDirection *= -1;
                 this.node.scaleX *= -1;
+            }
+            else if (otherCollider.node.parent.name == "Enemies") {
+                contact.disabled = true;
             }
             else if (otherCollider.node.name == "Mario") {
                 const contactNormal = contact.getWorldManifold().normal;
@@ -61,6 +64,9 @@ export class Turtle extends cc.Component {
             else if (otherCollider.node.name == "Boundary" && Math.abs(contact.getWorldManifold().normal.x) == 1) {
                 this.moveDirection *= -1;
                 this.node.scaleX *= -1;
+            }
+            else if (otherCollider.node.name == "BoundaryNULL") {
+                contact.disabled = true;
             }
             else if (otherCollider.node.name == "Mario") {
                 const contactNormal = contact.getWorldManifold().normal;

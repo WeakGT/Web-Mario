@@ -409,7 +409,7 @@
     "_anchorPoint": {
       "__type__": "cc.Vec2",
       "x": 0.5,
-      "y": 0.5
+      "y": 0
     },
     "_trs": {
       "__type__": "TypedArray",
@@ -483,6 +483,12 @@
     },
     "_enabled": true,
     "playerSpeed": 144,
+    "smallMarioSprite": {
+      "__uuid__": "a22a58a5-801b-465f-9169-af37f2aa0b38"
+    },
+    "bigMarioSprite": {
+      "__uuid__": "88eccb3f-874b-4750-a2ff-a517b496c7e3"
+    },
     "_id": "cb8auVhUBISormCdiB/I+u"
   },
   {
@@ -527,7 +533,7 @@
     "_offset": {
       "__type__": "cc.Vec2",
       "x": 0,
-      "y": 0
+      "y": 8
     },
     "_size": {
       "__type__": "cc.Size",
@@ -549,7 +555,9 @@
       {
         "__uuid__": "9fb79a80-fd8f-4185-b3d7-9ff1d9b76fbe"
       },
-      null
+      {
+        "__uuid__": "b7e0763c-3865-4db9-8a46-0b16f2d8b2e3"
+      }
     ],
     "playOnLoad": false,
     "_id": "a8To75JxlN6Y2Lj/qjRLwP"
@@ -4597,8 +4605,11 @@
     "usedSprite": {
       "__uuid__": "8301d0ee-27e5-4251-a54f-bc893ff2dbed"
     },
-    "rewardPrefab": {
+    "coinPrefab": {
       "__uuid__": "88570302-fd95-4af6-acd0-07705e99e2b2"
+    },
+    "mushroomPrefab": {
+      "__uuid__": "8e0ed8a0-ef58-45b5-abde-6028762ea61c"
     },
     "_id": "1egw3XZUtBy7ZbD5947dgh"
   },
@@ -4791,8 +4802,11 @@
     "usedSprite": {
       "__uuid__": "8301d0ee-27e5-4251-a54f-bc893ff2dbed"
     },
-    "rewardPrefab": {
+    "coinPrefab": {
       "__uuid__": "88570302-fd95-4af6-acd0-07705e99e2b2"
+    },
+    "mushroomPrefab": {
+      "__uuid__": "8e0ed8a0-ef58-45b5-abde-6028762ea61c"
     },
     "_id": "55E2Qv31lHp4wxr8Mf7Las"
   },
@@ -4985,8 +4999,11 @@
     "usedSprite": {
       "__uuid__": "8301d0ee-27e5-4251-a54f-bc893ff2dbed"
     },
-    "rewardPrefab": {
+    "coinPrefab": {
       "__uuid__": "88570302-fd95-4af6-acd0-07705e99e2b2"
+    },
+    "mushroomPrefab": {
+      "__uuid__": "8e0ed8a0-ef58-45b5-abde-6028762ea61c"
     },
     "_id": "42aHtICe1NiJyjeEgWGbhZ"
   },
@@ -5131,7 +5148,7 @@
       "__id__": 128
     },
     "_enabled": true,
-    "tag": 0,
+    "tag": 1,
     "_density": 1,
     "_sensor": false,
     "_friction": 0.2,
@@ -5179,8 +5196,11 @@
     "usedSprite": {
       "__uuid__": "8301d0ee-27e5-4251-a54f-bc893ff2dbed"
     },
-    "rewardPrefab": {
+    "coinPrefab": {
       "__uuid__": "88570302-fd95-4af6-acd0-07705e99e2b2"
+    },
+    "mushroomPrefab": {
+      "__uuid__": "8e0ed8a0-ef58-45b5-abde-6028762ea61c"
     },
     "_id": "f9GnodlaJOB5wjjrhf6J2I"
   },
@@ -5325,7 +5345,7 @@
       "__id__": 134
     },
     "_enabled": true,
-    "tag": 0,
+    "tag": 1,
     "_density": 1,
     "_sensor": false,
     "_friction": 0.2,
@@ -5373,9 +5393,8 @@
     "usedSprite": {
       "__uuid__": "8301d0ee-27e5-4251-a54f-bc893ff2dbed"
     },
-    "rewardPrefab": {
-      "__uuid__": "88570302-fd95-4af6-acd0-07705e99e2b2"
-    },
+    "coinPrefab": null,
+    "mushroomPrefab": null,
     "_id": "3a0Vo29GJLso/b2GRKTp5Q"
   },
   {
@@ -5567,9 +5586,8 @@
     "usedSprite": {
       "__uuid__": "8301d0ee-27e5-4251-a54f-bc893ff2dbed"
     },
-    "rewardPrefab": {
-      "__uuid__": "88570302-fd95-4af6-acd0-07705e99e2b2"
-    },
+    "coinPrefab": null,
+    "mushroomPrefab": null,
     "_id": "bb6OftD2RGOaryjftoDGSl"
   },
   {
