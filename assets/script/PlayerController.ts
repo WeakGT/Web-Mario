@@ -4,7 +4,7 @@ const {ccclass, property} = cc._decorator;
 export class PlayerController extends cc.Component {
 
     @property()
-    playerSpeed: number = 200;
+    playerSpeed: number = 144;
 
     private moveDir = 0;
     private leftDown: boolean = false;
@@ -18,7 +18,7 @@ export class PlayerController extends cc.Component {
     onLoad() {
         this.physicManager = cc.director.getPhysicsManager();
         this.physicManager.enabled = true;
-        this.physicManager.gravity = cc.v2(0, -1500);
+        // this.physicManager.gravity = cc.v2(0, -1500);
         this.anim = this.getComponent(cc.Animation);
         this.rigidBody = this.getComponent(cc.RigidBody);
 
@@ -49,7 +49,7 @@ export class PlayerController extends cc.Component {
     onKeyDown(event) {
         if (event.keyCode == cc.macro.KEY.a) this.leftDown = true, this.moveDir = -1;
         if (event.keyCode == cc.macro.KEY.d) this.rightDown = true, this.moveDir = 1;
-        if (event.keyCode == cc.macro.KEY.w && !this.fallDown) this.rigidBody.linearVelocity = cc.v2(0, 400);
+        if (event.keyCode == cc.macro.KEY.w && !this.fallDown) this.rigidBody.linearVelocity = cc.v2(0, 692);
         if (event.keyCode == cc.macro.KEY.space) this.reborn(cc.v3(1700, -250, 0));
     }
 
@@ -78,6 +78,10 @@ export class PlayerController extends cc.Component {
             this.isDescending = false;
             this.rigidBody.linearVelocity = cc.v2(0, 0);
             cc.director.loadScene("menu");
+        }
+        else if (otherCollider.node.name == "Goomba" || otherCollider.node.name == "Turtle") {
+            if (contact.getWorldManifold().normal.y < -0.8)
+                this.rigidBody.linearVelocity = cc.v2(0, 692);
         }
     }
 
