@@ -12,6 +12,12 @@ export class QuestionBox extends cc.Component {
     @property(cc.Prefab)
     mushroomPrefab: cc.Prefab = null;
 
+    @property(cc.AudioClip)
+    coinSound: cc.AudioClip = null;
+
+    @property(cc.AudioClip)
+    mushroomAppearSound: cc.AudioClip = null;
+
     private isHit: boolean = false;
 
     onHit(selfCollider: cc.Collider) {
@@ -36,11 +42,13 @@ export class QuestionBox extends cc.Component {
 
     spawnReward(tag: number) {
         let prefabToInstantiate = null;
+        let audioSound = null;
 
-        if (tag == 0) prefabToInstantiate = this.coinPrefab;
-        else if (tag == 1) prefabToInstantiate = this.mushroomPrefab;
+        if (tag == 0) prefabToInstantiate = this.coinPrefab, audioSound = this.coinSound;
+        else if (tag == 1) prefabToInstantiate = this.mushroomPrefab, audioSound = this.mushroomAppearSound;
         
         if (prefabToInstantiate) {
+            cc.audioEngine.playEffect(audioSound, false);
             const reward = cc.instantiate(prefabToInstantiate);
             reward.setPosition(this.node.position.x, this.node.position.y + this.node.height, this.node.position.z);
             this.node.parent.addChild(reward);

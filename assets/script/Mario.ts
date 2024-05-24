@@ -15,6 +15,30 @@ export class PlayerController extends cc.Component {
     @property(cc.SpriteFrame)
     diedMarioSprite: cc.SpriteFrame = null;
 
+    @property(cc.AudioClip)
+    bgm: cc.AudioClip = null;
+
+    @property(cc.AudioClip)
+    coinSound: cc.AudioClip = null;
+
+    @property(cc.AudioClip)
+    jumpSound: cc.AudioClip = null;
+
+    @property(cc.AudioClip)
+    kickSound: cc.AudioClip = null;
+
+    @property(cc.AudioClip)
+    powerUpSound: cc.AudioClip = null;
+
+    @property(cc.AudioClip)
+    powerDownSound: cc.AudioClip = null;
+
+    @property(cc.AudioClip)
+    stompSound: cc.AudioClip = null;
+
+    @property(cc.AudioClip)
+    dieSound: cc.AudioClip = null;
+
 
     private moveDir = 0;
     private leftDown: boolean = false;
@@ -32,6 +56,7 @@ export class PlayerController extends cc.Component {
         this.physicManager.enabled = true;
         this.anim = this.getComponent(cc.Animation);
         this.rigidBody = this.getComponent(cc.RigidBody);
+        cc.audioEngine.playEffect(this.bgm, true);
 
         cc.systemEvent.on(cc.SystemEvent.EventType.KEY_DOWN, this.onKeyDown, this);
         cc.systemEvent.on(cc.SystemEvent.EventType.KEY_UP, this.onKeyUp, this);
@@ -82,26 +107,32 @@ export class PlayerController extends cc.Component {
     }
 
     die() {
+        cc.audioEngine.stopAll();
+        cc.audioEngine.playEffect(this.dieSound, false);
         this.getComponent(cc.Sprite).spriteFrame = this.diedMarioSprite;
         this.scheduleOnce(() => {
             cc.director.loadScene("menu");
+        }, 2);
+    }
+
+    beInvincible() {
+        this.isInvincible = true;
+        this.scheduleOnce(() => {
+            this.isInvincible = false;
         }, 1);
+
+        // Flashing effect
+        this.schedule(() => {
+            this.node.opacity = this.node.opacity === 255 ? 0 : 255;
+        }, 0.1, 9, 0);
     }
 
     takeDamage() {
         this.life -= 1;
         if (this.life >= 1) {
+            cc.audioEngine.playEffect(this.powerDownSound, false);
             this.getComponent(cc.Sprite).spriteFrame = this.smallMarioSprite;
-
-            this.isInvincible = true;
-            this.scheduleOnce(() => {
-                this.isInvincible = false;
-            }, 1);
-
-            // Flashing effect
-            this.schedule(() => {
-                this.node.opacity = this.node.opacity === 255 ? 0 : 255;
-            }, 0.1, 9, 0);
+            this.beInvincible();
         }
         else {
             this.getComponent(cc.RigidBody).linearVelocity = cc.v2(0, 1000);
@@ -112,7 +143,10 @@ export class PlayerController extends cc.Component {
     onKeyDown(event) {
         if (event.keyCode == cc.macro.KEY.a) this.leftDown = true, this.moveDir = -1;
         if (event.keyCode == cc.macro.KEY.d) this.rightDown = true, this.moveDir = 1;
-        if (event.keyCode == cc.macro.KEY.w && !this.fallDown) this.rigidBody.linearVelocity = cc.v2(0, 692);
+        if (event.keyCode == cc.macro.KEY.w && !this.fallDown) {
+            this.rigidBody.linearVelocity = cc.v2(0, 692);
+            cc.audioEngine.playEffect(this.jumpSound, false);
+        }
         if (event.keyCode == cc.macro.KEY.space) this.reborn(cc.v3(1700, -250, 0));
     }
 
@@ -144,6 +178,7 @@ export class PlayerController extends cc.Component {
         else if (otherCollider.node.parent.name == "Enemies" || otherCollider.node.name == "Flower") {
             if (otherCollider.node.name == "Goomba") {
                 if (contact.getWorldManifold().normal.y < -0.5) {
+                    cc.audioEngine.playEffect(this.stompSound, false);
                     this.rigidBody.linearVelocity = cc.v2(0, 692);
                 }
                 else {
@@ -156,6 +191,7 @@ export class PlayerController extends cc.Component {
                 if (turtleComponent) {
                     if (turtleComponent.state == 1 || turtleComponent.state == 3) {
                         if (contact.getWorldManifold().normal.y < -0.5) {
+                            cc.audioEngine.playEffect(this.stompSound, false);
                             this.rigidBody.linearVelocity = cc.v2(0, 692);
                         }
                         else {
@@ -168,6 +204,7 @@ export class PlayerController extends cc.Component {
                         this.scheduleOnce(() => {
                             this.isInvincible = false;
                         }, 1);
+                        cc.audioEngine.playEffect(this.kickSound, false);
                     }
                     // state == 2, do nothing
                 }
@@ -179,7 +216,13 @@ export class PlayerController extends cc.Component {
         }
         else if (otherCollider.node.name == "Mushroom") {
             this.life += 1;
+            cc.audioEngine.playEffect(this.powerUpSound, false);
             this.getComponent(cc.Sprite).spriteFrame = this.bigMarioSprite;
+            otherCollider.node.destroy();
+            this.beInvincible();
+        }
+        else if (otherCollider.node.name == "Coin") {
+            cc.audioEngine.playEffect(this.coinSound, false);
             otherCollider.node.destroy();
         }
     }
