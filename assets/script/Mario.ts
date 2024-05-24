@@ -42,13 +42,22 @@ export class PlayerController extends cc.Component {
     update(dt) {
         if (this.isDescending) {
             this.rigidBody.linearVelocity = cc.v2(0, -10);
-        } else {
-            this.node.x += this.playerSpeed * this.moveDir * dt;
-            this.node.scaleX = this.moveDir >= 0 ? 1 : -1;
-            this.playAnimation();
+        }
+        else if (this.node.y < -320) {
+            if (this.life > 0) {
+                this.life = 0;
+                this.die();
+            }
+        }
+        else {
+            if (this.life > 0) {
+                this.node.x += this.playerSpeed * this.moveDir * dt;
+                this.node.scaleX = this.moveDir >= 0 ? 1 : -1;
+                this.playAnimation();
 
-            if (this.rigidBody.linearVelocity.y != 0) this.fallDown = true;
-            else this.fallDown = false;
+                if (this.rigidBody.linearVelocity.y != 0) this.fallDown = true;
+                else this.fallDown = false;
+            }
         }
     }
 
@@ -73,11 +82,7 @@ export class PlayerController extends cc.Component {
     }
 
     die() {
-        // doesn't work ?
-        cc.systemEvent.off(cc.SystemEvent.EventType.KEY_DOWN, this.onKeyDown, this);
-        cc.systemEvent.off(cc.SystemEvent.EventType.KEY_UP, this.onKeyUp, this);
         this.getComponent(cc.Sprite).spriteFrame = this.diedMarioSprite;
-        this.getComponent(cc.RigidBody).linearVelocity = cc.v2(0, 1000);
         this.scheduleOnce(() => {
             cc.director.loadScene("menu");
         }, 1);
@@ -98,7 +103,10 @@ export class PlayerController extends cc.Component {
                 this.node.opacity = this.node.opacity === 255 ? 0 : 255;
             }, 0.1, 9, 0);
         }
-        else this.die();
+        else {
+            this.getComponent(cc.RigidBody).linearVelocity = cc.v2(0, 1000);
+            this.die();
+        }
     }
 
     onKeyDown(event) {
@@ -154,6 +162,12 @@ export class PlayerController extends cc.Component {
                             if (this.isInvincible) contact.disabled = true;
                             else this.takeDamage();
                         }
+                    }
+                    else if (turtleComponent.state == 2) {
+                        this.isInvincible = true;
+                        this.scheduleOnce(() => {
+                            this.isInvincible = false;
+                        }, 1);
                     }
                     // state == 2, do nothing
                 }
