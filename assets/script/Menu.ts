@@ -4,6 +4,11 @@ const {ccclass, property} = cc._decorator;
 export default class Menu extends cc.Component {
 
     start () {
+        // firebase.auth().onAuthStateChanged(user => {
+        //     if (user) {} // read database
+        //     else cc.director.loadScene("Home");
+        // });
+
         let StartButton = new cc.Component.EventHandler();
         StartButton.target = this.node;
         StartButton.component = "Menu";

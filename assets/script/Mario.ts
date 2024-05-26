@@ -73,7 +73,12 @@ export class PlayerController extends cc.Component {
         cc.systemEvent.on(cc.SystemEvent.EventType.KEY_UP, this.onKeyUp, this);
     }
 
-    // start() {}
+    start() {
+        // firebase.auth().onAuthStateChanged(user => {
+        //     if (user) {} // read database
+        //     else cc.director.loadScene("Home");
+        // });
+    }
 
     playAnimation() {
         if (this.moveDir == 0) {

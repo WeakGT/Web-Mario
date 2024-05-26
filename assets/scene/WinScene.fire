@@ -58,7 +58,7 @@
     "_groupIndex": 0,
     "groupIndex": 0,
     "autoReleaseAssets": false,
-    "_id": "152cedeb-3070-4fa8-bffc-cc7bbfe7e79d"
+    "_id": "0073403e-55f7-4a8b-9874-dae32c7900f4"
   },
   {
     "__type__": "cc.Node",
@@ -258,7 +258,7 @@
     },
     "_contentSize": {
       "__type__": "cc.Size",
-      "width": 80,
+      "width": 30,
       "height": 40
     },
     "_anchorPoint": {
@@ -310,8 +310,8 @@
     ],
     "_srcBlendFactor": 770,
     "_dstBlendFactor": 771,
-    "_string": "GAME OVER",
-    "_N$string": "GAME OVER",
+    "_string": "WIN",
+    "_N$string": "WIN",
     "_fontSize": 40,
     "_lineHeight": 40,
     "_enableWrapText": true,
@@ -375,13 +375,13 @@
     "_id": "29zXboiXFBKoIV4PQ2liTe"
   },
   {
-    "__type__": "28ca9vMIdBC168hcqXTORNy",
+    "__type__": "dc0f6qNLSNB7Irsv+lVP8Ni",
     "_name": "",
     "_objFlags": 0,
     "node": {
       "__id__": 2
     },
     "_enabled": true,
-    "_id": "8e3i3ET55PRoHK9e5sMkmZ"
+    "_id": "5fMgKZDH1O85L0bzt02keX"
   }
 ]
