@@ -5,7 +5,7 @@ export default class SignUp extends cc.Component {
     start() {
         let SubmitButton = new cc.Component.EventHandler();
         SubmitButton.target = this.node;
-        SubmitButton.component = "Login";
+        SubmitButton.component = "SignUp";
         SubmitButton.handler = "onSignUp";
         cc.find("Canvas/SignUpForm/SubmitButton").getComponent(cc.Button).clickEvents.push(SubmitButton);
 
@@ -17,8 +17,13 @@ export default class SignUp extends cc.Component {
     }
 
     onSignUp() {
-        const email = cc.find("Canvas/SignUpForm/EmailBox").getComponent(cc.Label).string;
-        const password = cc.find("Canvas/SignUpForm/PasswordBox").getComponent(cc.Label).string;
+        console.log("----- Sign Up -----");
+
+        const email = cc.find("Canvas/SignUpForm/EmailBox").getComponent(cc.EditBox).string;
+        const password = cc.find("Canvas/SignUpForm/PasswordBox").getComponent(cc.EditBox).string;
+
+        console.log(email);
+        console.log(password);
 
         firebase.auth().createUserWithEmailAndPassword(email, password)
             .then((userCredential) => {

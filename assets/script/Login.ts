@@ -17,8 +17,13 @@ export default class Login extends cc.Component {
     }
 
     onLogin() {
-        const email = cc.find("Canvas/LoginForm/EmailBox").getComponent(cc.Label).string;
-        const password = cc.find("Canvas/LoginForm/PasswordBox").getComponent(cc.Label).string;
+        console.log("----- Login -----");
+
+        const email = cc.find("Canvas/LoginForm/EmailBox").getComponent(cc.EditBox).string;
+        const password = cc.find("Canvas/LoginForm/PasswordBox").getComponent(cc.EditBox).string;
+
+        console.log(email);
+        console.log(password);
 
         firebase.auth().signInWithEmailAndPassword(email, password)
             .then((userCredential) => {

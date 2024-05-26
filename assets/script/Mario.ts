@@ -73,12 +73,12 @@ export class PlayerController extends cc.Component {
         cc.systemEvent.on(cc.SystemEvent.EventType.KEY_UP, this.onKeyUp, this);
     }
 
-    start() {
-        // firebase.auth().onAuthStateChanged(user => {
-        //     if (user) {} // read database
-        //     else cc.director.loadScene("Home");
-        // });
-    }
+    // start() {
+    //     firebase.auth().onAuthStateChanged(user => {
+    //         if (user) {} // read database
+    //         else cc.director.loadScene("Home");
+    //     });
+    // }
 
     playAnimation() {
         if (this.moveDir == 0) {
@@ -274,10 +274,12 @@ export class PlayerController extends cc.Component {
         }
         // else if (otherCollider.node.name == "QuestionBox") {}
         else if (otherCollider.node.name == "Mushroom") {
+            otherCollider.node.destroy();
+            if (this.life == 2) return;
+
             this.life += 1;
             cc.audioEngine.playEffect(this.powerUpSound, false);
             this.getComponent(cc.Sprite).spriteFrame = this.bigMarioSprite;
-            otherCollider.node.destroy();
             this.beInvincible();
             this.updateScore(1000);
         }
