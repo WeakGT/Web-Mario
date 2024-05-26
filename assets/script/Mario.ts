@@ -53,9 +53,10 @@ export class PlayerController extends cc.Component {
     private fallDown: boolean = false;
     private isInvincible: boolean = false;
     public life: number = 1;
+    private score: number = 0;
 
     private remainTime: number = 300;
-    private remainLife: number = 1;
+    private remainLife: number = 5;
 
     onLoad() {
         this.physicManager = cc.director.getPhysicsManager();
@@ -69,37 +70,6 @@ export class PlayerController extends cc.Component {
     }
 
     // start() {}
-
-    update(dt) {
-        if (this.isDescending) { // win
-            this.rigidBody.linearVelocity = cc.v2(0, -10);
-        }
-        else if (this.life == 0) { // die
-            // do nothing
-        }
-        else if (this.node.y < -320) { // out of bound
-            this.life = 0;
-            this.die();
-        }
-        else { // gaming
-            // timeout
-            if (Math.floor(this.remainTime) > 0) this.remainTime -= dt;
-            else this.life = 0, this.getComponent(cc.RigidBody).linearVelocity = cc.v2(0, 1000), this.die();
-
-            this.node.x += this.playerSpeed * this.moveDir * dt;
-            this.node.scaleX = this.moveDir >= 0 ? 1 : -1;
-            this.playAnimation();
-
-            if (this.rigidBody.linearVelocity.y != 0) this.fallDown = true;
-            else this.fallDown = false;            
-        }
-
-        // update UI
-        // cc.find("Canvas/Main Camera/score").getComponent(cc.Label).string = (Array(7).join("0") + this.score.toString()).slice(-7);
-        // cc.find("Canvas/Main Camera/Labels/coinNum").getComponent(cc.Label).string = String(this.coin);
-        cc.find("Canvas/Main Camera/Labels/LifeNumber").getComponent(cc.Label).string = String(this.remainLife);
-        cc.find("Canvas/Main Camera/Labels/Time").getComponent(cc.Label).string = String(Math.floor(this.remainTime));
-    }
 
     playAnimation() {
         if (this.moveDir == 0) {
@@ -117,14 +87,22 @@ export class PlayerController extends cc.Component {
     }
 
     reborn(rebornPos: cc.Vec3) {
+        cc.systemEvent.on(cc.SystemEvent.EventType.KEY_DOWN, this.onKeyDown, this);
+        cc.systemEvent.on(cc.SystemEvent.EventType.KEY_UP, this.onKeyUp, this);
         this.node.position = rebornPos;
         // this.getComponent(cc.RigidBody).linearVelocity = cc.v2();
+        cc.audioEngine.stopAll();
         cc.audioEngine.playEffect(this.bgm, true);
+        this.getComponent(cc.Sprite).spriteFrame = this.smallMarioSprite;
         this.life = 1;
+        this.moveDir = 0;
         this.remainTime = 300;
+        this.beInvincible();
     }
 
     die() {
+        cc.systemEvent.off(cc.SystemEvent.EventType.KEY_DOWN, this.onKeyDown, this);
+        cc.systemEvent.off(cc.SystemEvent.EventType.KEY_UP, this.onKeyUp, this);
         this.remainLife -= 1;
         if (this.remainLife > 0) { // life -= 1
             cc.audioEngine.stopAll();
@@ -169,6 +147,43 @@ export class PlayerController extends cc.Component {
         }
     }
 
+    updateScore(addScore: number) {
+        this.score += addScore;
+        console.log(this.score);
+        cc.log(this.score);
+    }
+
+    update(dt) {
+        if (this.isDescending) { // win
+            this.rigidBody.linearVelocity = cc.v2(0, -10);
+        }
+        else if (this.life == 0) { // die
+            // do nothing
+        }
+        else if (this.node.y < -320) { // out of bound
+            this.life = 0;
+            this.die();
+        }
+        else { // gaming
+            // timeout
+            if (Math.floor(this.remainTime) > 0) this.remainTime -= dt;
+            else this.life = 0, this.getComponent(cc.RigidBody).linearVelocity = cc.v2(0, 1000), this.die();
+
+            this.node.x += this.playerSpeed * this.moveDir * dt;
+            this.node.scaleX = this.moveDir >= 0 ? 1 : -1;
+            this.playAnimation();
+
+            if (this.rigidBody.linearVelocity.y != 0) this.fallDown = true;
+            else this.fallDown = false;            
+        }
+
+        // update UI
+        // cc.find("Canvas/Main Camera/Labels/coinNum").getComponent(cc.Label).string = String(this.coin);
+        cc.find("Canvas/Main Camera/Labels/LifeNumber").getComponent(cc.Label).string = String(this.remainLife);
+        cc.find("Canvas/Main Camera/Labels/Time").getComponent(cc.Label).string = String(Math.floor(this.remainTime));
+        cc.find("Canvas/Main Camera/Labels/Score").getComponent(cc.Label).string = ("0000000" + this.score.toString()).slice(-7);
+    }
+
     onKeyDown(event) {
         if (event.keyCode == cc.macro.KEY.a) this.leftDown = true, this.moveDir = -1;
         if (event.keyCode == cc.macro.KEY.d) this.rightDown = true, this.moveDir = 1;
@@ -209,6 +224,7 @@ export class PlayerController extends cc.Component {
                 if (contact.getWorldManifold().normal.y < -0.5) {
                     cc.audioEngine.playEffect(this.stompSound, false);
                     this.rigidBody.linearVelocity = cc.v2(0, 692);
+                    this.updateScore(100);
                 }
                 else {
                     if (this.isInvincible) contact.disabled = true;
@@ -222,6 +238,7 @@ export class PlayerController extends cc.Component {
                         if (contact.getWorldManifold().normal.y < -0.5) {
                             cc.audioEngine.playEffect(this.stompSound, false);
                             this.rigidBody.linearVelocity = cc.v2(0, 692);
+                            this.updateScore(100);
                         }
                         else {
                             if (this.isInvincible) contact.disabled = true;
@@ -234,6 +251,7 @@ export class PlayerController extends cc.Component {
                             this.isInvincible = false;
                         }, 1);
                         cc.audioEngine.playEffect(this.kickSound, false);
+                        this.updateScore(100);
                     }
                     // state == 2, do nothing
                 }
@@ -243,16 +261,19 @@ export class PlayerController extends cc.Component {
                 else this.takeDamage();
             }
         }
+        // else if (otherCollider.node.name == "QuestionBox") {}
         else if (otherCollider.node.name == "Mushroom") {
             this.life += 1;
             cc.audioEngine.playEffect(this.powerUpSound, false);
             this.getComponent(cc.Sprite).spriteFrame = this.bigMarioSprite;
             otherCollider.node.destroy();
             this.beInvincible();
+            this.updateScore(1000);
         }
         else if (otherCollider.node.name == "Coin") {
             cc.audioEngine.playEffect(this.coinSound, false);
             otherCollider.node.destroy();
+            this.updateScore(100);
         }
     }
 }

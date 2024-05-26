@@ -41,9 +41,7 @@ export class Goomba extends cc.Component {
             if (contact.getWorldManifold().normal.y > 0.5) {
                 this.die();
             }
-            else { // Mario die
-
-            }
+            else {} // Mario Die
         }
     }
 

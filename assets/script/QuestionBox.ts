@@ -20,7 +20,7 @@ export class QuestionBox extends cc.Component {
 
     private isHit: boolean = false;
 
-    onHit(selfCollider: cc.Collider) {
+    onHit(selfCollider: cc.Collider, otherCollider: cc.Collider) {
         if (this.isHit) return;
 
         this.isHit = true;
@@ -35,6 +35,9 @@ export class QuestionBox extends cc.Component {
                     
                     this.getComponent(cc.Sprite).spriteFrame = this.usedSprite;
                     this.spawnReward(selfCollider.tag);
+                    if (selfCollider.tag == 0) { // coin
+                        otherCollider.getComponent("Mario").updateScore(100);
+                    } 
                 }, this)
             )
         );
@@ -74,8 +77,8 @@ export class QuestionBox extends cc.Component {
             }
         }
         /* ---------- ---------- ---------- */
-        if (otherCollider.node.name === 'Mario' && contact.getWorldManifold().normal.y < -0.5) {
-            this.onHit(selfCollider);
+        if (otherCollider.node.name === "Mario" && contact.getWorldManifold().normal.y < -0.5) {
+            this.onHit(selfCollider, otherCollider);
         }
     }
 }
