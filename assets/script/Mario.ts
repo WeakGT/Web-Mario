@@ -42,6 +42,9 @@ export class PlayerController extends cc.Component {
     @property(cc.AudioClip)
     gameOverSound: cc.AudioClip = null;
 
+    @property(cc.AudioClip)
+    levelClearSound: cc.AudioClip = null;
+
 
     private moveDir = 0;
     private leftDown: boolean = false;
@@ -63,6 +66,7 @@ export class PlayerController extends cc.Component {
         this.physicManager.enabled = true;
         this.anim = this.getComponent(cc.Animation);
         this.rigidBody = this.getComponent(cc.RigidBody);
+        cc.audioEngine.stopAll();
         cc.audioEngine.playEffect(this.bgm, true);
 
         cc.systemEvent.on(cc.SystemEvent.EventType.KEY_DOWN, this.onKeyDown, this);
@@ -213,11 +217,13 @@ export class PlayerController extends cc.Component {
             this.isDescending = true;
             cc.systemEvent.off(cc.SystemEvent.EventType.KEY_DOWN, this.onKeyDown, this);
             cc.systemEvent.off(cc.SystemEvent.EventType.KEY_UP, this.onKeyUp, this);
+            cc.audioEngine.stopAll();
+            cc.audioEngine.playEffect(this.levelClearSound, false);
         }
         else if (otherCollider.node.name == "Box" && this.isDescending && contact.getWorldManifold().normal.y == -1) { // win
             this.isDescending = false;
             this.rigidBody.linearVelocity = cc.v2(0, 0);
-            cc.director.loadScene("menu");
+            cc.director.loadScene("WinScene");
         }
         else if (otherCollider.node.parent.name == "Enemies" || otherCollider.node.name == "Flower") {
             if (otherCollider.node.name == "Goomba") {

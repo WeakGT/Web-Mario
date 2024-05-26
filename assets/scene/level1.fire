@@ -1667,6 +1667,9 @@
     "gameOverSound": {
       "__uuid__": "9751e00d-9f22-4ba5-9d31-04ce8a1aa0d9"
     },
+    "levelClearSound": {
+      "__uuid__": "0e08ce21-22ec-4561-b489-29cc8ffa4121"
+    },
     "_id": "cb8auVhUBISormCdiB/I+u"
   },
   {
