@@ -1,85 +1,93 @@
-# Software Studio 2024 Spring Assignment 2
+# Web Mario
+This is "2024 Spring CS241002 Software Studio" course project at National Tsing Hua University (NTHU).
 
-## Student ID : 111062117 Name : 黃祥陞
+## Scoring
 
-### Scoring
+| **Basic Components**           | **Score** | **Check** |
+| :----------------------------: | :-------: | :-------: |
+| Complete Game Process          |    5%     |    Y      |
+| Basic Rules                    |   55%     |    Y      |
+| Animations                     |   10%     |    Y      |
+| Sound Effects                  |   10%     |    Y      |
+| UI                             |   10%     |    Y      |
 
-|**Basic Component**|**Score**|**Check**|
-|:-:|:-:|:-:|
-|Complete Game Process|5%|Y|
-|Basic Rules|55%|Y|
-|Animations|10%|Y|
-|Sound Effects|10%|Y|
-|UI|10%|Y|
-
-|**Advanced Component**|**Score**|**Check**|
-|:-:|:-:|:-:|
-|firebase deploy|5%|Y|
-|Leaderboard|5%|N|
-|Offline multi-player game|5%|N|
-|Online multi-player game|10%|N|
-|Others [name of functions]|1-10%|N|
+| **Advanced Components**        | **Score** | **Check** |
+| :----------------------------: | :-------: | :-------: |
+| Firebase Deploy                |    5%     |    Y      |
+| Leaderboard                    |    5%     |    N      |
+| Offline Multiplayer Game       |    5%     |    N      |
+| Online Multiplayer Game        |   10%     |    N      |
+| Others [name of functions]     | 1-10%     |    N      |
 
 ---
 
-## Basic Components Description : 
-### World map
-- 在 Menu 有兩個關卡可以選（但兩個關卡都是一樣的）
+## Basic Components Description
 
-<img width="500px" src="./pictures/001.png"/>
+### World Map
+- In the Menu, two levels are available for selection (though both are identical).
+
+<img width="500px" src="./img/001.png"/>
 
 ### Player
-- Mario 會因重力下墜，角色、地板、敵人之間的碰撞機制正常
-- 使用 WASD 來控制
-- 按下 space 會跳到終點前面，方便快速 demo
-- Small Mario 吃到蘑菇後會變 Big Mario
+- Mario falls due to gravity. The collision mechanics between the character, floor, and enemies function correctly.
+- Use WASD to control Mario.
+- Press `Space` to jump to the area near the end for fast demo purposes.
+- Small Mario transforms into Big Mario after collecting a mushroom.
 
 ### Enemies
+
 #### Goomba
-- 被踩到後會死亡，獲得 $100$ 分
+- Dies when stomped on, and the player earns 100 points.
 
 #### Turtle
-- 被踩到後會變成龜殼，並獲得 $100$ 分
-- Mario 可以推龜殼，會往反方向快速移動，並獲得 $100$ 分
-- 當龜殼快速移動時，可以清除所有碰到的 Enemies
-- 當龜殼快速移動時，Mario 可以從上方踩它，使龜殼停止，並獲得 $100$ 分
+- Turns into a shell after being stomped, and the player earns 100 points.
+- Mario can push the shell, causing it to move rapidly in the opposite direction, and the player earns 100 points.
+- The moving shell clears all enemies in its path.
+- Mario can stomp the moving shell to stop it, and the player earns 100 points.
 
 #### Flower
 
 ### Question Blocks
-- 分為兩種 Question Blocks
-- Coin: 加 $100$ 分
-- Mushroom: 讓 Small Mario 變成 Big Mario
+- Two types of Question Blocks:
+    - **Coin**: The player earns 100 points.
+    - **Mushroom**: Transforms Small Mario into Big Mario.
 
 ### Animations
-#### Player has walk & jump animations (5%)
 
-#### Enemies Animation (each for 2%, up to 5%)
-- Goomba 移動
-- Flower 上下移動 / 花瓣開合
-- Turtle 移動、龜殼快速移動
+#### Player Walk & Jump Animations (5%)
+
+#### Enemies Animations (up to 5% total)
+- Goomba movement.
+- Flower moving up and down / petals opening and closing.
+- Turtle movement / shell rapid movement.
 
 ### Sound Effects
-- 有 BGM
-- Mario 跳起來有音效
-- Mario 死掉有音效
-- 生命減少有音效
-- 遊戲結束有音效
-- 金幣有音效
-- 蘑菇出現有音效
-- Small Mario 吃到蘑菇變成 Big Mario 有音效
-- Big Mario 碰到敵人變成 Small Mario 有音效
-- Mario 踩到敵人有音效
-- Mario 踢到龜殼有音效
-- Mario 通關成功有音效
+- Background music (BGM).
+- Sound effects for Mario jumping.
+- Sound effects for Mario dying.
+- Sound effects for life loss.
+- Sound effects for game over.
+- Sound effects for collecting coins.
+- Sound effects for mushrooms appearing.
+- Sound effects when Small Mario touches a mushroom to become Big Mario.
+- Sound effects when Big Mario touches an enemy and becomes Small Mario.
+- Sound effects when Mario stomps an enemy.
+- Sound effects when Mario kicks a shell.
+- Sound effects when Mario successfully clears a level.
 
 ### UI
-<img width="500px" src="./pictures/002.png"/>
 
-## Advanced Component Description : 
+<img width="500px" src="./img/002.png"/>
+
+---
+
+## Advanced Components Description
+
 ### Firebase
-- Firebase deploy
-- Login / Sign-Up
+- Firebase deployed.
+- Login / Sign-Up functionality.
 
-## Firebase page link (if you deploy)
-- https://mario-cdbd4.web.app
+---
+
+## Firebase Page Link
+- [Project URL](https://mario-cdbd4.web.app)
